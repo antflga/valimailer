@@ -6,7 +6,7 @@
 (defn send-email
   [to template-path]
   (let [html (slurp template-path)]
-    (println "Emailing " to)
+    (println "Emailing" to)
     (mail/send-mail config/creds {:from config/email
                                   :to to
                                   :subject config/subject
@@ -16,6 +16,7 @@
   [template-path page]
   (when (< page (db/get-page-count))
     (let [user-page (db/get-users-paginated page)]
+      (println (str "Emailing page " page " of " (db/get-page-count)))
       (doseq [user user-page]
         (send-email (:email user) template-path)
         (Thread/sleep config/ratelimit))
